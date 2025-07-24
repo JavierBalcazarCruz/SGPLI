@@ -176,21 +176,20 @@ const crearPrestamo = async (req, res) => {
 const obtenerPrestamos = async (req, res) => {
     let connection;
     
-    try {
-        // 1. Parámetros de filtrado
+try {
         const {
             estado,
-            usuario_prestador,
+            usuario_prestador_id, // NOTA: Esto espera un ID numérico, no un nombre
             fecha_desde,
-            fecha_hasta,
-            page = 1,
-            limit = 10
+            fecha_hasta
         } = req.query;
 
-        // 2. Conexión
+        const page = parseInt(req.query.page) || 1;
+        const limit = parseInt(req.query.limit) || 10;
+        const offset = (page - 1) * limit;
+
         connection = await conectarDB();
 
-        // 3. Construir query dinámicamente
         let whereConditions = [];
         let params = [];
 
@@ -199,9 +198,9 @@ const obtenerPrestamos = async (req, res) => {
             params.push(estado);
         }
 
-        if (usuario_prestador) {
-            whereConditions.push('(up.nombre LIKE ? OR up.email LIKE ?)');
-            params.push(`%${usuario_prestador}%`, `%${usuario_prestador}%`);
+        if (usuario_prestador_id) {
+            whereConditions.push('p.usuario_prestador_id = ?');
+            params.push(parseInt(usuario_prestador_id));
         }
 
         if (fecha_desde) {
@@ -214,15 +213,15 @@ const obtenerPrestamos = async (req, res) => {
             params.push(fecha_hasta);
         }
 
-        const whereClause = whereConditions.length > 0 
+        const whereClause = whereConditions.length > 0
             ? `WHERE ${whereConditions.join(' AND ')}`
             : '';
 
-        // 4. Query principal
-        const offset = (parseInt(page) - 1) * parseInt(limit);
-        
-        const [prestamos] = await connection.execute(`
-            SELECT 
+        const finalParamsMainQuery = [...params, limit, offset];
+
+        // CAMBIA 'execute' a 'query' aquí:
+        const [prestamos] = await connection.query(`
+            SELECT
                 p.*,
                 up.nombre as usuario_prestador_nombre,
                 up.email as usuario_prestador_email,
@@ -238,33 +237,34 @@ const obtenerPrestamos = async (req, res) => {
             GROUP BY p.id
             ORDER BY p.fecha_prestamo DESC
             LIMIT ? OFFSET ?
-        `, [...params, parseInt(limit), offset]);
+        `, finalParamsMainQuery);
 
-        // 5. Contar total para paginación
-        const [totalResult] = await connection.execute(`
+        const finalParamsCountQuery = [...params];
+
+        // CAMBIA 'execute' a 'query' aquí:
+        const [totalResult] = await connection.query(`
             SELECT COUNT(DISTINCT p.id) as total
             FROM prestamos p
             INNER JOIN usuarios up ON p.usuario_prestador_id = up.id
             INNER JOIN usuarios ue ON p.usuario_encargado_id = ue.id
             ${whereClause}
-        `, params);
+        `, finalParamsCountQuery);
 
         const total = totalResult[0].total;
 
-        // 6. Respuesta
         res.json({
             prestamos,
             paginacion: {
-                page: parseInt(page),
-                limit: parseInt(limit),
+                page: page,
+                limit: limit,
                 total,
-                total_pages: Math.ceil(total / parseInt(limit))
+                total_pages: Math.ceil(total / limit)
             }
         });
 
     } catch (error) {
-        console.log('Error al obtener préstamos:', error);
-        res.status(500).json({ msg: 'Error del servidor' });
+        console.error('Error al obtener préstamos:', error);
+        res.status(500).json({ msg: 'Error del servidor al obtener préstamos', details: error.message });
     } finally {
         if (connection) await connection.end();
     }
