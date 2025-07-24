@@ -6,6 +6,7 @@ import conectarDB from './config/db.js';
 // Importar rutas
 import authRoutes from './routes/authRoutes.js';
 import itemRoutes from './routes/itemRoutes.js';
+import prestamoRoutes from './routes/prestamoRoutes.js'; // 🆕 Nueva ruta
 
 const app = express();
 dotenv.config();
@@ -20,6 +21,7 @@ app.use(express.json());
 // Rutas
 app.use('/api/auth', authRoutes);
 app.use('/api/items', itemRoutes);
+app.use('/api/prestamos', prestamoRoutes); // 🆕 Nueva ruta para préstamos
 
 // Ruta de prueba
 app.get("/", (req, res) => {
@@ -28,7 +30,8 @@ app.get("/", (req, res) => {
         version: "1.0.0",
         endpoints: {
             auth: "/api/auth",
-            items: "/api/items"
+            items: "/api/items",
+            prestamos: "/api/prestamos" // 🆕 Nuevo endpoint
         }
     });
 });
@@ -39,4 +42,5 @@ app.listen(PORT, () => {
     console.log(`📋 Endpoints disponibles:`);
     console.log(`   - Autenticación: http://localhost:${PORT}/api/auth`);
     console.log(`   - Items: http://localhost:${PORT}/api/items`);
+    console.log(`   - Préstamos: http://localhost:${PORT}/api/prestamos`); // 🆕
 });
