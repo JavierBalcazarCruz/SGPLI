@@ -334,13 +334,130 @@ const toggleUsuario = async (req, res) => {
     }
 };
 
+/**
+ * Actualizar información de usuario (solo admin)
+ * AGREGAR ESTA FUNCIÓN al authController.js existente
+ */
+const actualizarUsuario = async (req, res) => {
+    let connection;
+    
+    try {
+        // 1. Verificar que sea admin
+        if (req.usuario.tipo !== 'admin') {
+            return res.status(403).json({ msg: 'Solo administradores pueden realizar esta acción' });
+        }
 
+        // 2. Validar ID
+        const { id } = req.params;
+        const userId = parseInt(id);
 
+        if (isNaN(userId) || userId <= 0) {
+            return res.status(400).json({ msg: 'ID de usuario no válido' });
+        }
+
+        // 3. Extraer y validar datos
+        const { nombre, email, password, tipo } = req.body;
+
+        if (!nombre?.trim() || !email?.trim()) {
+            return res.status(400).json({ msg: 'Nombre y email son obligatorios' });
+        }
+
+        const nombreLimpio = nombre.trim();
+        const emailLimpio = email.trim().toLowerCase();
+
+        // Validar email
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailRegex.test(emailLimpio)) {
+            return res.status(400).json({ msg: 'Email no válido' });
+        }
+
+        // Validar tipo si se proporciona
+        const tiposPermitidos = ['admin', 'encargado'];
+        if (tipo && !tiposPermitidos.includes(tipo)) {
+            return res.status(400).json({ msg: 'Tipo de usuario no válido' });
+        }
+
+        // 4. Conexión a BD
+        connection = await conectarDB();
+
+        // 5. Verificar que el usuario existe
+        const [usuariosExistentes] = await connection.execute(
+            'SELECT id, email FROM usuarios WHERE id = ?',
+            [userId]
+        );
+
+        if (usuariosExistentes.length === 0) {
+            return res.status(404).json({ msg: 'Usuario no encontrado' });
+        }
+
+        // 6. Verificar email único (excepto el mismo usuario)
+        const [emailsExistentes] = await connection.execute(
+            'SELECT id FROM usuarios WHERE email = ? AND id != ?',
+            [emailLimpio, userId]
+        );
+
+        if (emailsExistentes.length > 0) {
+            return res.status(400).json({ msg: 'El email ya está registrado' });
+        }
+
+        // 7. Preparar datos para actualizar
+        let updateQuery = 'UPDATE usuarios SET nombre = ?, email = ?';
+        let updateParams = [nombreLimpio, emailLimpio];
+
+        // Agregar tipo si se proporciona
+        if (tipo) {
+            updateQuery += ', tipo = ?';
+            updateParams.push(tipo);
+        }
+
+        // Agregar password si se proporciona
+        if (password) {
+            if (password.length < 6) {
+                return res.status(400).json({ 
+                    msg: 'El password debe tener al menos 6 caracteres' 
+                });
+            }
+            
+            const salt = await bcrypt.genSalt(10);
+            const passwordHash = await bcrypt.hash(password, salt);
+            updateQuery += ', password = ?';
+            updateParams.push(passwordHash);
+        }
+
+        updateQuery += ' WHERE id = ?';
+        updateParams.push(userId);
+
+        // 8. Actualizar usuario
+        await connection.execute(updateQuery, updateParams);
+
+        // 9. Obtener usuario actualizado (sin password)
+        const [usuarioActualizado] = await connection.execute(
+            `SELECT id, nombre, email, tipo, activo, fecha_creacion 
+             FROM usuarios WHERE id = ?`,
+            [userId]
+        );
+
+        // 10. Respuesta exitosa
+        res.json({
+            msg: 'Usuario actualizado correctamente',
+            usuario: usuarioActualizado[0]
+        });
+
+    } catch (error) {
+        console.log('Error al actualizar usuario:', error);
+        res.status(500).json({ msg: 'Error del servidor' });
+    } finally {
+        if (connection) await connection.end();
+    }
+};
+
+// AGREGAR AL EXPORT
 export {
     registrar,
     autenticar,
     perfil,
     cambiarPassword,
     listarUsuarios,
-    toggleUsuario
+    toggleUsuario,
+    actualizarUsuario  // ← NUEVO
 };

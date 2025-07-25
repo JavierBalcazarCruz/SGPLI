@@ -1,5 +1,6 @@
+// En: frontend/src/context/PrestamosProvider.jsx
 import { useState, useEffect, createContext } from 'react';
-import useAuth from '../hooks/useAuth';
+import useAuth from '../hooks/useAuth'; // ← AGREGAR ESTA LÍNEA
 import clienteAxios from '../config/axios';
 import Swal from 'sweetalert2';
 

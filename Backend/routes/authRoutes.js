@@ -7,7 +7,8 @@ import {
     perfil,
     cambiarPassword,
     listarUsuarios,
-    toggleUsuario
+    toggleUsuario,
+    actualizarUsuario  // ← AGREGAR IMPORT
 } from '../controllers/authController.js';
 
 import { checkAuth, soloAdmin } from '../middleware/authMiddleware.js';
@@ -15,9 +16,6 @@ import { checkAuth, soloAdmin } from '../middleware/authMiddleware.js';
 // ====================================
 // RUTAS PÚBLICAS (sin autenticación)
 // ====================================
-
-
-
 
 /**
  * POST /api/auth/login
@@ -61,11 +59,15 @@ router.post("/registro", checkAuth, soloAdmin, registrar);
 router.get('/usuarios', checkAuth, soloAdmin, listarUsuarios);
 
 /**
+ * PUT /api/auth/usuarios/:id
+ * Actualizar usuario (solo admin) ← NUEVA RUTA
+ */
+router.put('/usuarios/:id', checkAuth, soloAdmin, actualizarUsuario);
+
+/**
  * PUT /api/auth/usuarios/:id/toggle
  * Activar/desactivar usuario (solo admin)
  */
 router.put('/usuarios/:id/toggle', checkAuth, soloAdmin, toggleUsuario);
-
-
 
 export default router;
