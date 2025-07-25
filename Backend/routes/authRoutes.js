@@ -8,7 +8,10 @@ import {
     cambiarPassword,
     listarUsuarios,
     toggleUsuario,
-    actualizarUsuario  // ← AGREGAR IMPORT
+    actualizarUsuario,
+    obtenerMiHistorial,
+    obtenerMisEstadisticas,
+    actualizarMiPerfil
 } from '../controllers/authController.js';
 
 import { checkAuth, soloAdmin } from '../middleware/authMiddleware.js';
@@ -42,6 +45,24 @@ router.get('/perfil', checkAuth, perfil);
  */
 router.put('/cambiar-password', checkAuth, cambiarPassword);
 
+/**
+ * GET /api/auth/mi-historial
+ * Obtener historial personal del usuario autenticado
+ */
+router.get('/mi-historial', checkAuth, obtenerMiHistorial);
+
+/**
+ * GET /api/auth/mis-estadisticas
+ * Obtener estadísticas personales del usuario autenticado
+ */
+router.get('/mis-estadisticas', checkAuth, obtenerMisEstadisticas);
+
+/**
+ * PUT /api/auth/mi-perfil
+ * Actualizar perfil personal del usuario autenticado
+ */
+router.put('/mi-perfil', checkAuth, actualizarMiPerfil);
+
 // ====================================
 // RUTAS SOLO PARA ADMINISTRADORES
 // ====================================
@@ -60,7 +81,7 @@ router.get('/usuarios', checkAuth, soloAdmin, listarUsuarios);
 
 /**
  * PUT /api/auth/usuarios/:id
- * Actualizar usuario (solo admin) ← NUEVA RUTA
+ * Actualizar usuario (solo admin)
  */
 router.put('/usuarios/:id', checkAuth, soloAdmin, actualizarUsuario);
 

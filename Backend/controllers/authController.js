@@ -450,8 +450,223 @@ const actualizarUsuario = async (req, res) => {
         if (connection) await connection.end();
     }
 };
+/**
+ * AGREGAR ESTAS FUNCIONES AL authController.js EXISTENTE
+ */
 
-// AGREGAR AL EXPORT
+/**
+ * Obtener historial de actividades del usuario autenticado
+ */
+/**
+ * Obtener historial de actividades del usuario autenticado
+ * CORREGIDO: Convertir parámetros numéricos a string para evitar el bug de MySQL 8.0.22+
+ */
+const obtenerMiHistorial = async (req, res) => {
+    let connection;
+    
+    try {
+        const userId = req.usuario.id;
+        const limit = parseInt(req.query.limit) || 20;
+
+        connection = await conectarDB();
+
+        // Verificar que el usuario existe
+        const [userCheck] = await connection.execute(
+            'SELECT id FROM usuarios WHERE id = ?',
+            [userId]
+        );
+
+        if (userCheck.length === 0) {
+            return res.status(404).json({ msg: 'Usuario no encontrado' });
+        }
+
+        // Obtener historial de movimientos del usuario
+        // ✅ CLAVE: Convertir números a strings para evitar el bug de MySQL 8.0.22+
+        const [historial] = await connection.execute(
+            `SELECT 
+                hm.tipo,
+                hm.fecha,
+                hm.cantidad,
+                hm.observaciones,
+                i.nombre as item_nombre,
+                p.codigo as prestamo_codigo
+            FROM historial_movimientos hm
+            LEFT JOIN items i ON hm.item_id = i.id
+            LEFT JOIN prestamos p ON hm.prestamo_id = p.id
+            WHERE hm.usuario_id = ?
+            ORDER BY hm.fecha DESC
+            LIMIT ?`,
+            [userId.toString(), limit.toString()] // ← CONVERTIR A STRING
+        );
+
+        res.json({
+            historial: historial || []
+        });
+
+    } catch (error) {
+        console.log('Error al obtener historial personal:', error);
+        res.status(500).json({ 
+            msg: 'Error del servidor',
+            error: error.message 
+        });
+    } finally {
+        if (connection) await connection.end();
+    }
+};
+
+/**
+ * Obtener estadísticas personales del usuario autenticado
+ */
+/**
+ * Obtener estadísticas personales del usuario autenticado
+ * CORREGIDO: Convertir parámetros numéricos a string para evitar el bug de MySQL 8.0.22+
+ */
+const obtenerMisEstadisticas = async (req, res) => {
+    let connection;
+    
+    try {
+        const userId = req.usuario.id;
+
+        connection = await conectarDB();
+
+        // Inicializar estadísticas por defecto
+        let estadisticas = {
+            prestamos_creados: 0,
+            devoluciones_procesadas: 0,
+            items_gestionados: 0,
+            dias_activo: 0
+        };
+
+        try {
+            // Estadísticas de préstamos creados por el usuario
+            const [prestamosCreados] = await connection.execute(
+                `SELECT COUNT(*) as total 
+                 FROM prestamos 
+                 WHERE usuario_encargado_id = ?`,
+                [userId.toString()] // ← CONVERTIR A STRING
+            );
+            estadisticas.prestamos_creados = prestamosCreados[0]?.total || 0;
+
+            // Estadísticas de devoluciones procesadas
+            const [devolucionesProcesadas] = await connection.execute(
+                `SELECT COUNT(DISTINCT pi.prestamo_id) as total
+                 FROM prestamo_items pi
+                 INNER JOIN prestamos p ON pi.prestamo_id = p.id
+                 WHERE pi.estado = 'entregado' 
+                 AND p.usuario_encargado_id = ?`,
+                [userId.toString()] // ← CONVERTIR A STRING
+            );
+            estadisticas.devoluciones_procesadas = devolucionesProcesadas[0]?.total || 0;
+
+            // Items gestionados (a través del historial)
+            const [itemsGestionados] = await connection.execute(
+                `SELECT COUNT(DISTINCT hm.item_id) as total
+                 FROM historial_movimientos hm
+                 WHERE hm.usuario_id = ? 
+                 AND hm.tipo IN ('ajuste')
+                 AND hm.item_id IS NOT NULL`,
+                [userId.toString()] // ← CONVERTIR A STRING
+            );
+            estadisticas.items_gestionados = itemsGestionados[0]?.total || 0;
+
+            // Días activo (aproximado por días únicos con actividad)
+            const [diasActivo] = await connection.execute(
+                `SELECT COUNT(DISTINCT DATE(hm.fecha)) as total
+                 FROM historial_movimientos hm
+                 WHERE hm.usuario_id = ?`,
+                [userId.toString()] // ← CONVERTIR A STRING
+            );
+            estadisticas.dias_activo = diasActivo[0]?.total || 0;
+
+        } catch (statsError) {
+            console.log('Error al calcular estadísticas específicas:', statsError);
+            // Las estadísticas ya están inicializadas en 0
+        }
+
+        res.json(estadisticas);
+
+    } catch (error) {
+        console.log('Error al obtener estadísticas personales:', error);
+        res.status(500).json({ 
+            msg: 'Error del servidor',
+            estadisticas: {
+                prestamos_creados: 0,
+                devoluciones_procesadas: 0,
+                items_gestionados: 0,
+                dias_activo: 0
+            }
+        });
+    } finally {
+        if (connection) await connection.end();
+    }
+};
+
+/**
+ * Actualizar perfil del usuario autenticado
+ */
+/**
+ * Actualizar perfil del usuario autenticado
+ * CORREGIDO: Convertir parámetros numéricos a string para evitar el bug de MySQL 8.0.22+
+ */
+const actualizarMiPerfil = async (req, res) => {
+    let connection;
+    
+    try {
+        const userId = req.usuario.id;
+        const { nombre, email } = req.body;
+
+        // Validaciones
+        if (!nombre?.trim() || !email?.trim()) {
+            return res.status(400).json({ msg: 'Nombre y email son obligatorios' });
+        }
+
+        const nombreLimpio = nombre.trim();
+        const emailLimpio = email.trim().toLowerCase();
+
+        // Validar email
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailRegex.test(emailLimpio)) {
+            return res.status(400).json({ msg: 'Email no válido' });
+        }
+
+        connection = await conectarDB();
+
+        // Verificar email único (excepto el mismo usuario)
+        const [emailsExistentes] = await connection.execute(
+            'SELECT id FROM usuarios WHERE email = ? AND id != ?',
+            [emailLimpio, userId.toString()] // ← CONVERTIR A STRING
+        );
+
+        if (emailsExistentes.length > 0) {
+            return res.status(400).json({ msg: 'El email ya está registrado' });
+        }
+
+        // Actualizar usuario
+        await connection.execute(
+            'UPDATE usuarios SET nombre = ?, email = ? WHERE id = ?',
+            [nombreLimpio, emailLimpio, userId.toString()] // ← CONVERTIR A STRING
+        );
+
+        // Obtener usuario actualizado
+        const [usuarioActualizado] = await connection.execute(
+            'SELECT id, nombre, email, tipo FROM usuarios WHERE id = ?',
+            [userId.toString()] // ← CONVERTIR A STRING
+        );
+
+        res.json({
+            msg: 'Perfil actualizado correctamente',
+            usuario: usuarioActualizado[0]
+        });
+
+    } catch (error) {
+        console.log('Error al actualizar perfil:', error);
+        res.status(500).json({ msg: 'Error del servidor' });
+    } finally {
+        if (connection) await connection.end();
+    }
+};
+
+// AGREGAR AL EXPORT EXISTENTE:
 export {
     registrar,
     autenticar,
@@ -459,5 +674,8 @@ export {
     cambiarPassword,
     listarUsuarios,
     toggleUsuario,
-    actualizarUsuario  // ← NUEVO
+    actualizarUsuario,
+    obtenerMiHistorial,
+    obtenerMisEstadisticas,
+    actualizarMiPerfil
 };
