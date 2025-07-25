@@ -1,10 +1,12 @@
 import { useState, useEffect, createContext } from 'react';
+import useAuth from '../hooks/useAuth';
 import clienteAxios from '../config/axios';
 import Swal from 'sweetalert2';
 
 const PrestamosContext = createContext();
 
 const PrestamosProvider = ({ children }) => {
+    const { auth } = useAuth(); // ← AGREGAR ESTO
     const [prestamos, setPrestamos] = useState([]);
     const [usuarios, setUsuarios] = useState([]);
     const [cargando, setCargando] = useState(true);
@@ -214,18 +216,27 @@ const PrestamosProvider = ({ children }) => {
         setPrestamoActual(null);
     };
 
-    // Cargar datos iniciales
+    // ✅ CARGAR DATOS SOLO CUANDO EL USUARIO ESTÉ AUTENTICADO
     useEffect(() => {
         const cargarDatos = async () => {
-            await Promise.all([
-                obtenerPrestamos(),
-                obtenerUsuarios(),
-                obtenerEstadisticasPrestamos()
-            ]);
+            // ← SOLO CARGAR SI HAY USUARIO AUTENTICADO
+            if (auth?.id) {
+                await Promise.all([
+                    obtenerPrestamos(),
+                    obtenerUsuarios(),
+                    obtenerEstadisticasPrestamos()
+                ]);
+            } else {
+                // Si no hay usuario, limpiar estados
+                setPrestamos([]);
+                setUsuarios([]);
+                setEstadisticas({});
+                setCargando(false);
+            }
         };
         
         cargarDatos();
-    }, []);
+    }, [auth?.id]); // ← DEPENDENCIA: auth?.id
 
     return (
         <PrestamosContext.Provider value={{

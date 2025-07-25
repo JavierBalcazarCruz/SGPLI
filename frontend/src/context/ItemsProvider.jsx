@@ -1,10 +1,12 @@
 import { useState, useEffect, createContext } from 'react';
+import useAuth from '../hooks/useAuth';
 import clienteAxios from '../config/axios';
 import Swal from 'sweetalert2';
 
 const ItemsContext = createContext();
 
 const ItemsProvider = ({ children }) => {
+    const { auth } = useAuth(); // ← AGREGAR ESTO
     const [items, setItems] = useState([]);
     const [categorias, setCategorias] = useState([]);
     const [cargando, setCargando] = useState(true);
@@ -209,18 +211,27 @@ const ItemsProvider = ({ children }) => {
         });
     };
 
-    // Cargar datos iniciales
+    // ✅ CARGAR DATOS SOLO CUANDO EL USUARIO ESTÉ AUTENTICADO
     useEffect(() => {
         const cargarDatos = async () => {
-            await Promise.all([
-                obtenerItems(),
-                obtenerCategorias(),
-                obtenerEstadisticas()
-            ]);
+            // ← SOLO CARGAR SI HAY USUARIO AUTENTICADO
+            if (auth?.id) {
+                await Promise.all([
+                    obtenerItems(),
+                    obtenerCategorias(),
+                    obtenerEstadisticas()
+                ]);
+            } else {
+                // Si no hay usuario, limpiar estados
+                setItems([]);
+                setCategorias([]);
+                setEstadisticas({});
+                setCargando(false);
+            }
         };
         
         cargarDatos();
-    }, []);
+    }, [auth?.id]); // ← DEPENDENCIA: auth?.id
 
     return (
         <ItemsContext.Provider value={{

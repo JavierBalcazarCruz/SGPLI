@@ -24,14 +24,19 @@ const checkAuth = async (req, res, next) => {
             return res.status(403).json({ msg: 'Token no proporcionado' });
         }
 
+        // 4. Validación básica del formato JWT
+        if (!isValidJWTFormat(token)) {
+            return res.status(403).json({ msg: 'Token con formato inválido' });
+        }
+
         try {
-            // 4. Verificar y decodificar token
+            // 5. Verificar y decodificar token
             const decoded = jwt.verify(token, process.env.JWT_SECRET);
             
-            // 5. Conexión a BD
+            // 6. Conexión a BD
             connection = await conectarDB();
             
-            // 6. Buscar usuario y verificar que esté activo
+            // 7. Buscar usuario y verificar que esté activo
             const [users] = await connection.execute(
                 `SELECT id, nombre, email, tipo, activo 
                  FROM usuarios 
@@ -43,13 +48,24 @@ const checkAuth = async (req, res, next) => {
                 return res.status(403).json({ msg: 'Usuario no encontrado o inactivo' });
             }
 
-            // 7. Almacenar datos del usuario en el request
+            // 8. Almacenar datos del usuario en el request
             req.usuario = users[0];
             next();
 
         } catch (jwtError) {
-            console.log('Error JWT:', jwtError);
-            return res.status(403).json({ msg: 'Token inválido o expirado' });
+            console.log('Error JWT:', jwtError.name, jwtError.message);
+            
+            // Manejar diferentes tipos de errores JWT
+            let mensaje = 'Token inválido';
+            if (jwtError.name === 'TokenExpiredError') {
+                mensaje = 'Token expirado';
+            } else if (jwtError.name === 'JsonWebTokenError') {
+                mensaje = 'Token malformado o inválido';
+            } else if (jwtError.name === 'NotBeforeError') {
+                mensaje = 'Token no válido todavía';
+            }
+            
+            return res.status(403).json({ msg: mensaje });
         }
 
     } catch (error) {
@@ -64,6 +80,27 @@ const checkAuth = async (req, res, next) => {
             }
         }
     }
+};
+
+/**
+ * Función auxiliar para validar formato JWT básico
+ */
+const isValidJWTFormat = (token) => {
+    if (!token || typeof token !== 'string') return false;
+    
+    // Un JWT válido tiene 3 partes separadas por puntos
+    const parts = token.split('.');
+    if (parts.length !== 3) return false;
+    
+    // Verificar que no esté vacío y no tenga espacios o caracteres extraños
+    if (token.trim() !== token || token.includes(' ')) return false;
+    
+    // Cada parte debe tener contenido
+    for (let part of parts) {
+        if (part.length === 0) return false;
+    }
+    
+    return true;
 };
 
 /**
