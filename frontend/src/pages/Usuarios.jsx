@@ -178,7 +178,7 @@ const Usuarios = () => {
 
             {/* Estadísticas */}
             <div className="row g-3 mb-4">
-                <div className="col-md-2-4">
+                <div className="col-md-3">
                     <div className="card border-0 shadow-sm">
                         <div className="card-body text-center">
                             <i className="bi bi-people text-primary fs-1 mb-2"></i>
@@ -187,7 +187,7 @@ const Usuarios = () => {
                         </div>
                     </div>
                 </div>
-                <div className="col-md-2-4">
+                <div className="col-md-3">
                     <div className="card border-0 shadow-sm">
                         <div className="card-body text-center">
                             <i className="bi bi-person-check text-success fs-1 mb-2"></i>
@@ -196,7 +196,7 @@ const Usuarios = () => {
                         </div>
                     </div>
                 </div>
-                <div className="col-md-2-4">
+                <div className="col-md-3">
                     <div className="card border-0 shadow-sm">
                         <div className="card-body text-center">
                             <i className="bi bi-person-x text-secondary fs-1 mb-2"></i>
@@ -205,7 +205,7 @@ const Usuarios = () => {
                         </div>
                     </div>
                 </div>
-                <div className="col-md-2-4">
+                <div className="col-md-3">
                     <div className="card border-0 shadow-sm">
                         <div className="card-body text-center">
                             <i className="bi bi-shield text-danger fs-1 mb-2"></i>
@@ -214,7 +214,7 @@ const Usuarios = () => {
                         </div>
                     </div>
                 </div>
-                <div className="col-md-2-4">
+                <div className="col-md-3">
                     <div className="card border-0 shadow-sm">
                         <div className="card-body text-center">
                             <i className="bi bi-person-gear text-primary fs-1 mb-2"></i>

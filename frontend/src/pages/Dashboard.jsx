@@ -69,15 +69,16 @@ const Dashboard = () => {
                 </div>
             </div>
 
-            {/* Estadísticas Cards */}
+           {/* Estadísticas Cards - CORREGIDAS */}
             <div className="row g-4 mb-4">
                 <div className="col-md-6 col-xl-3">
                     <div className="card border-0 shadow-sm">
                         <div className="card-body">
                             <div className="d-flex align-items-center">
                                 <div className="flex-shrink-0">
-                                    <div className="bg-primary bg-opacity-10 rounded-circle p-3">
-                                        <i className="bi bi-tools text-primary fs-4"></i>
+                                    <div className="bg-primary bg-opacity-10 rounded-circle d-flex align-items-center justify-content-center" 
+                                         style={{width: '48px', height: '48px'}}>
+                                        <i className="bi bi-tools text-primary fs-5"></i>
                                     </div>
                                 </div>
                                 <div className="flex-grow-1 ms-3">
@@ -94,8 +95,9 @@ const Dashboard = () => {
                         <div className="card-body">
                             <div className="d-flex align-items-center">
                                 <div className="flex-shrink-0">
-                                    <div className="bg-success bg-opacity-10 rounded-circle p-3">
-                                        <i className="bi bi-check-circle text-success fs-4"></i>
+                                    <div className="bg-success bg-opacity-10 rounded-circle d-flex align-items-center justify-content-center" 
+                                         style={{width: '48px', height: '48px'}}>
+                                        <i className="bi bi-check-circle text-success fs-5"></i>
                                     </div>
                                 </div>
                                 <div className="flex-grow-1 ms-3">
@@ -112,8 +114,9 @@ const Dashboard = () => {
                         <div className="card-body">
                             <div className="d-flex align-items-center">
                                 <div className="flex-shrink-0">
-                                    <div className="bg-info bg-opacity-10 rounded-circle p-3">
-                                        <i className="bi bi-clipboard-check text-info fs-4"></i>
+                                    <div className="bg-info bg-opacity-10 rounded-circle d-flex align-items-center justify-content-center" 
+                                         style={{width: '48px', height: '48px'}}>
+                                        <i className="bi bi-clipboard-check text-info fs-5"></i>
                                     </div>
                                 </div>
                                 <div className="flex-grow-1 ms-3">
@@ -130,8 +133,9 @@ const Dashboard = () => {
                         <div className="card-body">
                             <div className="d-flex align-items-center">
                                 <div className="flex-shrink-0">
-                                    <div className="bg-warning bg-opacity-10 rounded-circle p-3">
-                                        <i className="bi bi-exclamation-triangle text-warning fs-4"></i>
+                                    <div className="bg-warning bg-opacity-10 rounded-circle d-flex align-items-center justify-content-center" 
+                                         style={{width: '48px', height: '48px'}}>
+                                        <i className="bi bi-exclamation-triangle text-warning fs-5"></i>
                                     </div>
                                 </div>
                                 <div className="flex-grow-1 ms-3">
@@ -144,13 +148,14 @@ const Dashboard = () => {
                 </div>
             </div>
 
-            {/* Acciones Rápidas */}
+           {/* Acciones Rápidas - CÍRCULOS CORREGIDOS */}
             <div className="row g-4">
                 <div className="col-md-6 col-lg-4">
                     <div className="card border-0 shadow-sm h-100">
                         <div className="card-body text-center">
-                            <div className="bg-primary bg-opacity-10 rounded-circle p-4 mx-auto mb-3" style={{width: 'fit-content'}}>
-                                <i className="bi bi-plus-circle text-primary" style={{fontSize: '2rem'}}></i>
+                            <div className="bg-primary bg-opacity-10 rounded-circle d-flex align-items-center justify-content-center mx-auto mb-3" 
+                                 style={{width: '48px', height: '48px'}}>
+                                <i className="bi bi-plus-circle text-primary fs-5"></i>
                             </div>
                             <h5 className="card-title">Nuevo Préstamo</h5>
                             <p className="card-text text-muted">
@@ -167,8 +172,9 @@ const Dashboard = () => {
                 <div className="col-md-6 col-lg-4">
                     <div className="card border-0 shadow-sm h-100">
                         <div className="card-body text-center">
-                            <div className="bg-success bg-opacity-10 rounded-circle p-4 mx-auto mb-3" style={{width: 'fit-content'}}>
-                                <i className="bi bi-arrow-return-left text-success" style={{fontSize: '2rem'}}></i>
+                            <div className="bg-success bg-opacity-10 rounded-circle d-flex align-items-center justify-content-center mx-auto mb-3" 
+                                 style={{width: '48px', height: '48px'}}>
+                                <i className="bi bi-arrow-return-left text-success fs-5"></i>
                             </div>
                             <h5 className="card-title">Devolver Items</h5>
                             <p className="card-text text-muted">
@@ -185,8 +191,9 @@ const Dashboard = () => {
                 <div className="col-md-6 col-lg-4">
                     <div className="card border-0 shadow-sm h-100">
                         <div className="card-body text-center">
-                            <div className="bg-info bg-opacity-10 rounded-circle p-4 mx-auto mb-3" style={{width: 'fit-content'}}>
-                                <i className="bi bi-list-check text-info" style={{fontSize: '2rem'}}></i>
+                            <div className="bg-info bg-opacity-10 rounded-circle d-flex align-items-center justify-content-center mx-auto mb-3" 
+                                 style={{width: '48px', height: '48px'}}>
+                                <i className="bi bi-list-check text-info fs-5"></i>
                             </div>
                             <h5 className="card-title">Gestionar Inventario</h5>
                             <p className="card-text text-muted">
@@ -204,8 +211,9 @@ const Dashboard = () => {
                 <div className="col-md-6 col-lg-4">
                     <div className="card border-0 shadow-sm h-100">
                         <div className="card-body text-center">
-                            <div className="bg-secondary bg-opacity-10 rounded-circle p-4 mx-auto mb-3" style={{width: 'fit-content'}}>
-                                <i className="bi bi-clipboard-data text-secondary" style={{fontSize: '2rem'}}></i>
+                            <div className="bg-secondary bg-opacity-10 rounded-circle d-flex align-items-center justify-content-center mx-auto mb-3" 
+                                 style={{width: '48px', height: '48px'}}>
+                                <i className="bi bi-clipboard-data text-secondary fs-5"></i>
                             </div>
                             <h5 className="card-title">Historial de Préstamos</h5>
                             <p className="card-text text-muted">
@@ -262,17 +270,18 @@ const Dashboard = () => {
                     <div className="col-md-6 col-lg-4">
                         <div className="card border-0 shadow-sm h-100 border-warning">
                             <div className="card-body text-center">
-                                <div className="bg-warning bg-opacity-10 rounded-circle p-4 mx-auto mb-3" style={{width: 'fit-content'}}>
-                                    <i className="bi bi-people text-warning" style={{fontSize: '2rem'}}></i>
+                                <div className="bg-warning bg-opacity-10 rounded-circle d-flex align-items-center justify-content-center mx-auto mb-3" 
+                                     style={{width: '48px', height: '48px'}}>
+                                    <i className="bi bi-people text-warning fs-5"></i>
                                 </div>
                                 <h5 className="card-title">Gestión de Usuarios</h5>
                                 <p className="card-text text-muted">
                                     Administra usuarios del sistema
                                 </p>
-                                <button className="btn btn-warning" disabled>
-                                    <i className="bi bi-gear me-2"></i>
-                                    Próximamente
-                                </button>
+                                <Link to="/admin/usuarios" className="btn btn-warning">
+                                    <i className="bi bi-people me-2"></i>
+                                    Gestionar Usuarios
+                                </Link>
                             </div>
                         </div>
                     </div>
@@ -306,6 +315,63 @@ const Dashboard = () => {
                                             day: 'numeric'
                                         })}
                                     </small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {/* Footer profesional con derechos de autor */}
+            <div className="row mt-4">
+                <div className="col-12">
+                    <div className="card border-0 shadow-sm border-primary border-opacity-25">
+                        <div className="card-body">
+                            <div className="row align-items-center">
+                                <div className="col-md-8">
+                                    <div className="d-flex align-items-center mb-2">
+                                        <div className="bg-primary bg-opacity-10 rounded-circle d-flex align-items-center justify-content-center me-3" 
+                                             style={{width: '40px', height: '40px'}}>
+                                            <i className="bi bi-person-gear text-primary"></i>
+                                        </div>
+                                        <div>
+                                            <h6 className="mb-0">
+                                                Sistema de Gestión de Préstamos - Laboratorio de Informática
+                                            </h6>
+                                            <small className="text-primary">SGPLI v1.0.0</small>
+                                        </div>
+                                    </div>
+                                    <p className="text-muted mb-1">
+                                        <strong>Desarrollado por:</strong> Lic. Javier Bálcazar Cruz
+                                    </p>
+                                    <small className="text-muted">
+                                        <i className="bi bi-c-circle me-1"></i>
+                                        © 2025 • Todos los derechos reservados • 
+                                        Prohibida su reproducción total o parcial sin autorización expresa del autor
+                                    </small>
+                                </div>
+                                <div className="col-md-4 text-md-end">
+                                    <div className="d-flex flex-column align-items-md-end">
+                                        <small className="text-muted mb-1">
+                                            <i className="bi bi-calendar-event me-1"></i>
+                                            {new Date().toLocaleDateString('es-ES', {
+                                                weekday: 'long',
+                                                year: 'numeric',
+                                                month: 'long',
+                                                day: 'numeric'
+                                            })}
+                                        </small>
+                                        <small className="text-muted mb-1">
+                                            <i className="bi bi-clock me-1"></i>
+                                            {new Date().toLocaleTimeString('es-ES', {
+                                                hour: '2-digit',
+                                                minute: '2-digit'
+                                            })}
+                                        </small>
+                                        <div className="badge bg-primary bg-opacity-10 text-primary">
+                                            <i className="bi bi-shield-check me-1"></i>
+                                            Sistema Seguro
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
