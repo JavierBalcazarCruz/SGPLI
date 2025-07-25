@@ -16,6 +16,7 @@ import Items from './pages/Items';
 import Prestamos from './pages/Prestamos';
 import Devoluciones from './pages/Devoluciones';
 import Usuarios from './pages/Usuarios';
+import Perfil from './pages/Perfil';
 
 function App() {
     return (
@@ -38,6 +39,7 @@ function App() {
                                         <Route path="prestamos" element={<Prestamos />} />
                                         <Route path="devoluciones" element={<Devoluciones />} />
                                         <Route path="usuarios" element={<Usuarios />} />
+                                        <Route path="perfil" element={<Perfil />} />
                                         {/* Aquí agregaremos más rutas conforme las vayamos creando */}
                                     </Route>
                                 </Route>
