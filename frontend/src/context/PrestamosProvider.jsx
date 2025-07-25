@@ -184,8 +184,8 @@ const PrestamosProvider = ({ children }) => {
             </head>
             <body>
                 <div class="header">
-                    <h1>🔧 Sistema de Gestión de Préstamos</h1>
-                    <h2>Laboratorio de Informática</h2>
+                    <h1>Entrega de material</h1>
+                    <h2>Laboratorio de Informática Conalep Naucalpan l</h2>
                     <p style="margin: 5px 0; font-weight: bold;">VOUCHER DE PRÉSTAMO</p>
                 </div>
 
@@ -260,7 +260,7 @@ const PrestamosProvider = ({ children }) => {
                     <p>Código: <strong>${codigoVoucher}</strong></p>
                     <hr>
                     <p>Sistema desarrollado por <strong>Lic. Javier Bálcazar Cruz</strong></p>
-                    <p>© 2025 • Laboratorio de Informática • Impreso: ${new Date().toLocaleString('es-ES')}</p>
+                    <p>© 2025 • Laboratorio de Informática Conalep Naucalpan l • Impreso: ${new Date().toLocaleString('es-ES')}</p>
                 </div>
             </body>
             </html>
