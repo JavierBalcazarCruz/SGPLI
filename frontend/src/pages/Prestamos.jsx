@@ -110,13 +110,15 @@ const Prestamos = () => {
             </div>
 
             {/* Estadísticas Rápidas */}
+          {/* Estadísticas Rápidas - CÍRCULOS CORREGIDOS */}
             <div className="row g-3 mb-4">
                 <div className="col-md-3">
                     <div className="card border-0 shadow-sm">
                         <div className="card-body">
                             <div className="d-flex align-items-center">
-                                <div className="bg-primary bg-opacity-10 rounded-circle p-2 me-3">
-                                    <i className="bi bi-clipboard-check text-primary"></i>
+                                <div className="bg-primary bg-opacity-10 rounded-circle d-flex align-items-center justify-content-center me-3" 
+                                     style={{width: '48px', height: '48px'}}>
+                                    <i className="bi bi-clipboard-check text-primary fs-5"></i>
                                 </div>
                                 <div>
                                     <h6 className="text-muted mb-0">Total Préstamos</h6>
@@ -131,8 +133,9 @@ const Prestamos = () => {
                     <div className="card border-0 shadow-sm">
                         <div className="card-body">
                             <div className="d-flex align-items-center">
-                                <div className="bg-info bg-opacity-10 rounded-circle p-2 me-3">
-                                    <i className="bi bi-clock text-info"></i>
+                                <div className="bg-info bg-opacity-10 rounded-circle d-flex align-items-center justify-content-center me-3" 
+                                     style={{width: '48px', height: '48px'}}>
+                                    <i className="bi bi-clock text-info fs-5"></i>
                                 </div>
                                 <div>
                                     <h6 className="text-muted mb-0">Activos</h6>
@@ -147,8 +150,9 @@ const Prestamos = () => {
                     <div className="card border-0 shadow-sm">
                         <div className="card-body">
                             <div className="d-flex align-items-center">
-                                <div className="bg-success bg-opacity-10 rounded-circle p-2 me-3">
-                                    <i className="bi bi-check-circle text-success"></i>
+                                <div className="bg-success bg-opacity-10 rounded-circle d-flex align-items-center justify-content-center me-3" 
+                                     style={{width: '48px', height: '48px'}}>
+                                    <i className="bi bi-check-circle text-success fs-5"></i>
                                 </div>
                                 <div>
                                     <h6 className="text-muted mb-0">Completados</h6>
@@ -163,8 +167,9 @@ const Prestamos = () => {
                     <div className="card border-0 shadow-sm">
                         <div className="card-body">
                             <div className="d-flex align-items-center">
-                                <div className="bg-danger bg-opacity-10 rounded-circle p-2 me-3">
-                                    <i className="bi bi-exclamation-triangle text-danger"></i>
+                                <div className="bg-danger bg-opacity-10 rounded-circle d-flex align-items-center justify-content-center me-3" 
+                                     style={{width: '48px', height: '48px'}}>
+                                    <i className="bi bi-exclamation-triangle text-danger fs-5"></i>
                                 </div>
                                 <div>
                                     <h6 className="text-muted mb-0">Vencidos</h6>
@@ -175,7 +180,6 @@ const Prestamos = () => {
                     </div>
                 </div>
             </div>
-
             {/* Filtros */}
             <FiltrosPrestamos onFiltrosChange={handleFiltrosChange} />
 

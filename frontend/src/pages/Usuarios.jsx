@@ -177,49 +177,72 @@ const Usuarios = () => {
             </div>
 
             {/* Estadísticas */}
+            {/* Estadísticas Rápidas - ICONOS MÁS PEQUEÑOS */}
             <div className="row g-3 mb-4">
                 <div className="col-md-3">
                     <div className="card border-0 shadow-sm">
-                        <div className="card-body text-center">
-                            <i className="bi bi-people text-primary fs-1 mb-2"></i>
-                            <h4 className="mb-1">{estadisticas.total}</h4>
-                            <small className="text-muted">Total Usuarios</small>
+                        <div className="card-body">
+                            <div className="d-flex align-items-center">
+                                <div className="bg-primary bg-opacity-10 rounded-circle d-flex align-items-center justify-content-center me-3" 
+                                     style={{width: '48px', height: '48px'}}>
+                                    <i className="bi bi-clipboard-check text-primary" style={{fontSize: '1.1rem'}}></i>
+                                </div>
+                                <div>
+                                    <h6 className="text-muted mb-0">Total Préstamos</h6>
+                                    <h4 className="mb-0">{estadisticas?.estadisticas_generales?.total_prestamos || 0}</h4>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
+
                 <div className="col-md-3">
                     <div className="card border-0 shadow-sm">
-                        <div className="card-body text-center">
-                            <i className="bi bi-person-check text-success fs-1 mb-2"></i>
-                            <h4 className="mb-1">{estadisticas.activos}</h4>
-                            <small className="text-muted">Activos</small>
+                        <div className="card-body">
+                            <div className="d-flex align-items-center">
+                                <div className="bg-info bg-opacity-10 rounded-circle d-flex align-items-center justify-content-center me-3" 
+                                     style={{width: '48px', height: '48px'}}>
+                                    <i className="bi bi-clock text-info" style={{fontSize: '1.1rem'}}></i>
+                                </div>
+                                <div>
+                                    <h6 className="text-muted mb-0">Activos</h6>
+                                    <h4 className="mb-0">{estadisticas?.estadisticas_generales?.prestamos_activos || 0}</h4>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
+
                 <div className="col-md-3">
                     <div className="card border-0 shadow-sm">
-                        <div className="card-body text-center">
-                            <i className="bi bi-person-x text-secondary fs-1 mb-2"></i>
-                            <h4 className="mb-1">{estadisticas.inactivos}</h4>
-                            <small className="text-muted">Inactivos</small>
+                        <div className="card-body">
+                            <div className="d-flex align-items-center">
+                                <div className="bg-success bg-opacity-10 rounded-circle d-flex align-items-center justify-content-center me-3" 
+                                     style={{width: '48px', height: '48px'}}>
+                                    <i className="bi bi-check-circle text-success" style={{fontSize: '1.1rem'}}></i>
+                                </div>
+                                <div>
+                                    <h6 className="text-muted mb-0">Completados</h6>
+                                    <h4 className="mb-0">{estadisticas?.estadisticas_generales?.prestamos_completados || 0}</h4>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
+
                 <div className="col-md-3">
                     <div className="card border-0 shadow-sm">
-                        <div className="card-body text-center">
-                            <i className="bi bi-shield text-danger fs-1 mb-2"></i>
-                            <h4 className="mb-1">{estadisticas.admins}</h4>
-                            <small className="text-muted">Administradores</small>
-                        </div>
-                    </div>
-                </div>
-                <div className="col-md-3">
-                    <div className="card border-0 shadow-sm">
-                        <div className="card-body text-center">
-                            <i className="bi bi-person-gear text-primary fs-1 mb-2"></i>
-                            <h4 className="mb-1">{estadisticas.encargados}</h4>
-                            <small className="text-muted">Encargados</small>
+                        <div className="card-body">
+                            <div className="d-flex align-items-center">
+                                <div className="bg-danger bg-opacity-10 rounded-circle d-flex align-items-center justify-content-center me-3" 
+                                     style={{width: '48px', height: '48px'}}>
+                                    <i className="bi bi-exclamation-triangle text-danger" style={{fontSize: '1.1rem'}}></i>
+                                </div>
+                                <div>
+                                    <h6 className="text-muted mb-0">Vencidos</h6>
+                                    <h4 className="mb-0">{estadisticas?.estadisticas_generales?.prestamos_vencidos || 0}</h4>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -284,6 +307,7 @@ const Usuarios = () => {
             </div>
 
             {/* Tabla de Usuarios */}
+          {/* Tabla de Usuarios - CÍRCULOS CORREGIDOS */}
             <div className="card shadow-sm">
                 <div className="card-body p-0">
                     <div className="table-responsive">
@@ -316,8 +340,9 @@ const Usuarios = () => {
                                         <tr key={usuario.id}>
                                             <td>
                                                 <div className="d-flex align-items-center">
-                                                    <div className="bg-primary bg-opacity-10 rounded-circle p-2 me-3">
-                                                        <i className="bi bi-person text-primary"></i>
+                                                    <div className="bg-primary bg-opacity-10 rounded-circle d-flex align-items-center justify-content-center me-3" 
+                                                         style={{width: '40px', height: '40px'}}>
+                                                        <i className="bi bi-person text-primary" style={{fontSize: '1rem'}}></i>
                                                     </div>
                                                     <div>
                                                         <div className="fw-medium">{usuario.nombre}</div>
@@ -369,7 +394,6 @@ const Usuarios = () => {
                     </div>
                 </div>
             </div>
-
             {/* Modal */}
             <ModalUsuario 
                 mostrar={mostrarModal}
