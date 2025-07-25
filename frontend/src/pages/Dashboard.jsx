@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import useAuth from '../hooks/useAuth';
 import clienteAxios from '../config/axios';
 
@@ -40,10 +41,6 @@ const Dashboard = () => {
         obtenerEstadisticas();
     }, []);
 
-    const handleCerrarSesion = () => {
-        cerrarSesion();
-    };
-
     if (cargando) {
         return (
             <div className="d-flex justify-content-center align-items-center vh-100">
@@ -55,208 +52,261 @@ const Dashboard = () => {
     }
 
     return (
-        <div className="min-vh-100 bg-light">
-            {/* Header */}
-            <nav className="navbar navbar-expand-lg navbar-dark bg-primary shadow-sm">
-                <div className="container-fluid">
-                    <span className="navbar-brand mb-0 h1">
-                        <i className="bi bi-gear-fill me-2"></i>
-                        Sistema Laboratorio
-                    </span>
-                    
-                    <div className="d-flex align-items-center">
-                        <div className="dropdown">
-                            <button
-                                className="btn btn-outline-light dropdown-toggle"
-                                type="button"
-                                id="dropdownMenuButton"
-                                data-bs-toggle="dropdown"
-                                aria-expanded="false"
-                            >
-                                <i className="bi bi-person-circle me-2"></i>
-                                {auth.nombre}
-                            </button>
-                            <ul className="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownMenuButton">
-                                <li>
-                                    <span className="dropdown-item-text">
-                                        <small className="text-muted">Tipo: {auth.tipo}</small>
-                                    </span>
-                                </li>
-                                <li><hr className="dropdown-divider" /></li>
-                                <li>
-                                    <button className="dropdown-item" type="button">
-                                        <i className="bi bi-person-gear me-2"></i>
-                                        Mi Perfil
-                                    </button>
-                                </li>
-                                <li>
-                                    <button className="dropdown-item" type="button">
-                                        <i className="bi bi-key me-2"></i>
-                                        Cambiar Contraseña
-                                    </button>
-                                </li>
-                                <li><hr className="dropdown-divider" /></li>
-                                <li>
-                                    <button 
-                                        className="dropdown-item text-danger" 
-                                        type="button"
-                                        onClick={handleCerrarSesion}
-                                    >
-                                        <i className="bi bi-box-arrow-right me-2"></i>
-                                        Cerrar Sesión
-                                    </button>
-                                </li>
-                            </ul>
+        <div className="container-fluid py-4">
+            {/* Bienvenida */}
+            <div className="row mb-4">
+                <div className="col-12">
+                    <div className="card bg-gradient bg-primary text-white">
+                        <div className="card-body">
+                            <h2 className="fw-bold mb-2">
+                                ¡Bienvenido, {auth.nombre}! 👋
+                            </h2>
+                            <p className="mb-0 opacity-75">
+                                Panel de control del Sistema de Gestión de Préstamos
+                            </p>
                         </div>
                     </div>
                 </div>
-            </nav>
+            </div>
 
-            {/* Main Content */}
-            <div className="container-fluid py-4">
-                {/* Bienvenida */}
-                <div className="row mb-4">
-                    <div className="col-12">
-                        <div className="card bg-gradient bg-primary text-white">
-                            <div className="card-body">
-                                <h2 className="fw-bold mb-2">
-                                    ¡Bienvenido, {auth.nombre}! 👋
-                                </h2>
-                                <p className="mb-0 opacity-75">
-                                    Panel de control del Sistema de Gestión de Préstamos
-                                </p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                {/* Estadísticas Cards */}
-                <div className="row g-4 mb-4">
-                    <div className="col-md-6 col-xl-3">
-                        <div className="card border-0 shadow-sm">
-                            <div className="card-body">
-                                <div className="d-flex align-items-center">
-                                    <div className="flex-shrink-0">
-                                        <div className="bg-primary bg-opacity-10 rounded-circle p-3">
-                                            <i className="bi bi-tools text-primary fs-4"></i>
-                                        </div>
-                                    </div>
-                                    <div className="flex-grow-1 ms-3">
-                                        <h6 className="text-muted mb-1">Total Items</h6>
-                                        <h3 className="mb-0">{estadisticas.items.total_items}</h3>
+            {/* Estadísticas Cards */}
+            <div className="row g-4 mb-4">
+                <div className="col-md-6 col-xl-3">
+                    <div className="card border-0 shadow-sm">
+                        <div className="card-body">
+                            <div className="d-flex align-items-center">
+                                <div className="flex-shrink-0">
+                                    <div className="bg-primary bg-opacity-10 rounded-circle p-3">
+                                        <i className="bi bi-tools text-primary fs-4"></i>
                                     </div>
                                 </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div className="col-md-6 col-xl-3">
-                        <div className="card border-0 shadow-sm">
-                            <div className="card-body">
-                                <div className="d-flex align-items-center">
-                                    <div className="flex-shrink-0">
-                                        <div className="bg-success bg-opacity-10 rounded-circle p-3">
-                                            <i className="bi bi-check-circle text-success fs-4"></i>
-                                        </div>
-                                    </div>
-                                    <div className="flex-grow-1 ms-3">
-                                        <h6 className="text-muted mb-1">Items Disponibles</h6>
-                                        <h3 className="mb-0">{estadisticas.items.items_disponibles}</h3>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div className="col-md-6 col-xl-3">
-                        <div className="card border-0 shadow-sm">
-                            <div className="card-body">
-                                <div className="d-flex align-items-center">
-                                    <div className="flex-shrink-0">
-                                        <div className="bg-info bg-opacity-10 rounded-circle p-3">
-                                            <i className="bi bi-clipboard-check text-info fs-4"></i>
-                                        </div>
-                                    </div>
-                                    <div className="flex-grow-1 ms-3">
-                                        <h6 className="text-muted mb-1">Préstamos Activos</h6>
-                                        <h3 className="mb-0">{estadisticas.prestamos.prestamos_activos}</h3>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div className="col-md-6 col-xl-3">
-                        <div className="card border-0 shadow-sm">
-                            <div className="card-body">
-                                <div className="d-flex align-items-center">
-                                    <div className="flex-shrink-0">
-                                        <div className="bg-warning bg-opacity-10 rounded-circle p-3">
-                                            <i className="bi bi-exclamation-triangle text-warning fs-4"></i>
-                                        </div>
-                                    </div>
-                                    <div className="flex-grow-1 ms-3">
-                                        <h6 className="text-muted mb-1">Préstamos Vencidos</h6>
-                                        <h3 className="mb-0">{estadisticas.prestamos.prestamos_vencidos}</h3>
-                                    </div>
+                                <div className="flex-grow-1 ms-3">
+                                    <h6 className="text-muted mb-1">Total Items</h6>
+                                    <h3 className="mb-0">{estadisticas.items.total_items}</h3>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
 
-                {/* Acciones Rápidas */}
-                <div className="row g-4">
-                    <div className="col-md-6 col-lg-4">
-                        <div className="card border-0 shadow-sm h-100">
-                            <div className="card-body text-center">
-                                <div className="bg-primary bg-opacity-10 rounded-circle p-4 mx-auto mb-3" style={{width: 'fit-content'}}>
-                                    <i className="bi bi-plus-circle text-primary" style={{fontSize: '2rem'}}></i>
+                <div className="col-md-6 col-xl-3">
+                    <div className="card border-0 shadow-sm">
+                        <div className="card-body">
+                            <div className="d-flex align-items-center">
+                                <div className="flex-shrink-0">
+                                    <div className="bg-success bg-opacity-10 rounded-circle p-3">
+                                        <i className="bi bi-check-circle text-success fs-4"></i>
+                                    </div>
                                 </div>
-                                <h5 className="card-title">Nuevo Préstamo</h5>
-                                <p className="card-text text-muted">
-                                    Registra un nuevo préstamo de herramientas
-                                </p>
-                                <button className="btn btn-primary">
-                                    <i className="bi bi-plus me-2"></i>
-                                    Crear Préstamo
-                                </button>
+                                <div className="flex-grow-1 ms-3">
+                                    <h6 className="text-muted mb-1">Items Disponibles</h6>
+                                    <h3 className="mb-0">{estadisticas.items.items_disponibles}</h3>
+                                </div>
                             </div>
                         </div>
                     </div>
+                </div>
 
-                    <div className="col-md-6 col-lg-4">
-                        <div className="card border-0 shadow-sm h-100">
-                            <div className="card-body text-center">
-                                <div className="bg-success bg-opacity-10 rounded-circle p-4 mx-auto mb-3" style={{width: 'fit-content'}}>
-                                    <i className="bi bi-arrow-return-left text-success" style={{fontSize: '2rem'}}></i>
+                <div className="col-md-6 col-xl-3">
+                    <div className="card border-0 shadow-sm">
+                        <div className="card-body">
+                            <div className="d-flex align-items-center">
+                                <div className="flex-shrink-0">
+                                    <div className="bg-info bg-opacity-10 rounded-circle p-3">
+                                        <i className="bi bi-clipboard-check text-info fs-4"></i>
+                                    </div>
                                 </div>
-                                <h5 className="card-title">Devolver Items</h5>
-                                <p className="card-text text-muted">
-                                    Procesa la devolución de herramientas
-                                </p>
-                                <button className="btn btn-success">
-                                    <i className="bi bi-search me-2"></i>
-                                    Buscar Préstamo
-                                </button>
+                                <div className="flex-grow-1 ms-3">
+                                    <h6 className="text-muted mb-1">Préstamos Activos</h6>
+                                    <h3 className="mb-0">{estadisticas.prestamos.prestamos_activos}</h3>
+                                </div>
                             </div>
                         </div>
                     </div>
+                </div>
 
-                    <div className="col-md-6 col-lg-4">
-                        <div className="card border-0 shadow-sm h-100">
-                            <div className="card-body text-center">
-                                <div className="bg-info bg-opacity-10 rounded-circle p-4 mx-auto mb-3" style={{width: 'fit-content'}}>
-                                    <i className="bi bi-list-check text-info" style={{fontSize: '2rem'}}></i>
+                <div className="col-md-6 col-xl-3">
+                    <div className="card border-0 shadow-sm">
+                        <div className="card-body">
+                            <div className="d-flex align-items-center">
+                                <div className="flex-shrink-0">
+                                    <div className="bg-warning bg-opacity-10 rounded-circle p-3">
+                                        <i className="bi bi-exclamation-triangle text-warning fs-4"></i>
+                                    </div>
                                 </div>
-                                <h5 className="card-title">Gestionar Inventario</h5>
+                                <div className="flex-grow-1 ms-3">
+                                    <h6 className="text-muted mb-1">Préstamos Vencidos</h6>
+                                    <h3 className="mb-0">{estadisticas.prestamos.prestamos_vencidos}</h3>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            {/* Acciones Rápidas */}
+            <div className="row g-4">
+                <div className="col-md-6 col-lg-4">
+                    <div className="card border-0 shadow-sm h-100">
+                        <div className="card-body text-center">
+                            <div className="bg-primary bg-opacity-10 rounded-circle p-4 mx-auto mb-3" style={{width: 'fit-content'}}>
+                                <i className="bi bi-plus-circle text-primary" style={{fontSize: '2rem'}}></i>
+                            </div>
+                            <h5 className="card-title">Nuevo Préstamo</h5>
+                            <p className="card-text text-muted">
+                                Registra un nuevo préstamo de herramientas
+                            </p>
+                            <Link to="/admin/prestamos" className="btn btn-primary">
+                                <i className="bi bi-plus me-2"></i>
+                                Crear Préstamo
+                            </Link>
+                        </div>
+                    </div>
+                </div>
+
+                <div className="col-md-6 col-lg-4">
+                    <div className="card border-0 shadow-sm h-100">
+                        <div className="card-body text-center">
+                            <div className="bg-success bg-opacity-10 rounded-circle p-4 mx-auto mb-3" style={{width: 'fit-content'}}>
+                                <i className="bi bi-arrow-return-left text-success" style={{fontSize: '2rem'}}></i>
+                            </div>
+                            <h5 className="card-title">Devolver Items</h5>
+                            <p className="card-text text-muted">
+                                Procesa la devolución de herramientas
+                            </p>
+                            <Link to="/admin/devoluciones" className="btn btn-success">
+                                <i className="bi bi-search me-2"></i>
+                                Buscar Préstamo
+                            </Link>
+                        </div>
+                    </div>
+                </div>
+
+                <div className="col-md-6 col-lg-4">
+                    <div className="card border-0 shadow-sm h-100">
+                        <div className="card-body text-center">
+                            <div className="bg-info bg-opacity-10 rounded-circle p-4 mx-auto mb-3" style={{width: 'fit-content'}}>
+                                <i className="bi bi-list-check text-info" style={{fontSize: '2rem'}}></i>
+                            </div>
+                            <h5 className="card-title">Gestionar Inventario</h5>
+                            <p className="card-text text-muted">
+                                Administra items y categorías
+                            </p>
+                            <Link to="/admin/items" className="btn btn-info">
+                                <i className="bi bi-gear me-2"></i>
+                                Ver Inventario
+                            </Link>
+                        </div>
+                    </div>
+                </div>
+
+                {/* Card adicional para ver todos los préstamos */}
+                <div className="col-md-6 col-lg-4">
+                    <div className="card border-0 shadow-sm h-100">
+                        <div className="card-body text-center">
+                            <div className="bg-secondary bg-opacity-10 rounded-circle p-4 mx-auto mb-3" style={{width: 'fit-content'}}>
+                                <i className="bi bi-clipboard-data text-secondary" style={{fontSize: '2rem'}}></i>
+                            </div>
+                            <h5 className="card-title">Historial de Préstamos</h5>
+                            <p className="card-text text-muted">
+                                Consulta todos los préstamos registrados
+                            </p>
+                            <Link to="/admin/prestamos" className="btn btn-secondary">
+                                <i className="bi bi-list me-2"></i>
+                                Ver Historial
+                            </Link>
+                        </div>
+                    </div>
+                </div>
+
+                {/* Card de estadísticas rápidas */}
+                <div className="col-md-6 col-lg-4">
+                    <div className="card border-0 shadow-sm h-100">
+                        <div className="card-body">
+                            <h5 className="card-title">
+                                <i className="bi bi-graph-up text-primary me-2"></i>
+                                Resumen Rápido
+                            </h5>
+                            <div className="row g-2 text-center">
+                                <div className="col-6">
+                                    <div className="p-2 bg-light rounded">
+                                        <div className="fw-bold text-primary">{estadisticas.items.unidades_disponibles}</div>
+                                        <small className="text-muted">Unidades Disponibles</small>
+                                    </div>
+                                </div>
+                                <div className="col-6">
+                                    <div className="p-2 bg-light rounded">
+                                        <div className="fw-bold text-success">{estadisticas.prestamos.prestamos_completados || 0}</div>
+                                        <small className="text-muted">Completados</small>
+                                    </div>
+                                </div>
+                                <div className="col-6">
+                                    <div className="p-2 bg-light rounded">
+                                        <div className="fw-bold text-warning">{estadisticas.prestamos.prestamos_parciales || 0}</div>
+                                        <small className="text-muted">Parciales</small>
+                                    </div>
+                                </div>
+                                <div className="col-6">
+                                    <div className="p-2 bg-light rounded">
+                                        <div className="fw-bold text-info">{estadisticas.prestamos.total_prestamos}</div>
+                                        <small className="text-muted">Total Préstamos</small>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                {/* Card de acceso rápido para administradores */}
+                {auth.tipo === 'admin' && (
+                    <div className="col-md-6 col-lg-4">
+                        <div className="card border-0 shadow-sm h-100 border-warning">
+                            <div className="card-body text-center">
+                                <div className="bg-warning bg-opacity-10 rounded-circle p-4 mx-auto mb-3" style={{width: 'fit-content'}}>
+                                    <i className="bi bi-people text-warning" style={{fontSize: '2rem'}}></i>
+                                </div>
+                                <h5 className="card-title">Gestión de Usuarios</h5>
                                 <p className="card-text text-muted">
-                                    Administra items y categorías
+                                    Administra usuarios del sistema
                                 </p>
-                                <button className="btn btn-info">
+                                <button className="btn btn-warning" disabled>
                                     <i className="bi bi-gear me-2"></i>
-                                    Ver Inventario
+                                    Próximamente
                                 </button>
+                            </div>
+                        </div>
+                    </div>
+                )}
+            </div>
+
+            {/* Información adicional para el usuario */}
+            <div className="row mt-4">
+                <div className="col-12">
+                    <div className="card border-0 shadow-sm">
+                        <div className="card-body">
+                            <div className="row align-items-center">
+                                <div className="col-md-8">
+                                    <h6 className="mb-2">
+                                        <i className="bi bi-info-circle text-primary me-2"></i>
+                                        Información del Sistema
+                                    </h6>
+                                    <p className="text-muted mb-0">
+                                        Estás conectado como <strong>{auth.nombre}</strong> ({auth.tipo}). 
+                                        El sistema permite gestionar préstamos de herramientas de laboratorio de forma eficiente 
+                                        con seguimiento completo de inventario y devoluciones.
+                                    </p>
+                                </div>
+                                <div className="col-md-4 text-md-end">
+                                    <small className="text-muted">
+                                        <i className="bi bi-calendar3 me-1"></i>
+                                        {new Date().toLocaleDateString('es-ES', {
+                                            weekday: 'long',
+                                            year: 'numeric',
+                                            month: 'long',
+                                            day: 'numeric'
+                                        })}
+                                    </small>
+                                </div>
                             </div>
                         </div>
                     </div>

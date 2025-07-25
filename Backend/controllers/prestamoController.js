@@ -305,6 +305,10 @@ const obtenerPrestamoPorCodigo = async (req, res) => {
  * ↩️ DEVOLVER ITEMS (PARCIAL O TOTAL)
  * Núcleo del sistema de devoluciones
  */
+/**
+ * ↩️ DEVOLVER ITEMS (PARCIAL O TOTAL) - VERSIÓN FINAL
+ * Con historial manual como respaldo
+ */
 const devolverItems = async (req, res) => {
     let connection;
     
@@ -365,7 +369,7 @@ const devolverItems = async (req, res) => {
 
                 const prestamoItem = prestamoItems[0];
 
-                // Actualizar el item como devuelto
+                // Actualizar el item como devuelto (el trigger maneja inventario e historial)
                 await connection.execute(
                     `UPDATE prestamo_items SET 
                         estado = 'entregado',
@@ -375,7 +379,23 @@ const devolverItems = async (req, res) => {
                     [condicion_devolucion || 'bueno', prestamo_item_id]
                 );
 
-                // Los triggers se encargan de actualizar el inventario
+                // RESPALDO: Insertar en historial manualmente por si el trigger falla
+                try {
+                    await connection.execute(
+                        `INSERT INTO historial_movimientos (tipo, usuario_id, item_id, prestamo_id, cantidad, observaciones)
+                         VALUES ('devolucion', ?, ?, ?, ?, ?)`,
+                        [
+                            req.usuario.id, // Usuario actual que procesa la devolución
+                            prestamoItem.item_id,
+                            prestamo.id,
+                            prestamoItem.cantidad,
+                            `Devolución procesada por ${req.usuario.nombre} - Condición: ${condicion_devolucion || 'bueno'}`
+                        ]
+                    );
+                } catch (historialError) {
+                    // Si falla el historial manual, no cancelar toda la operación
+                    console.log('Advertencia: No se pudo insertar en historial manual:', historialError.message);
+                }
 
                 itemsDevueltos.push({
                     prestamo_item_id,
@@ -389,7 +409,7 @@ const devolverItems = async (req, res) => {
             if (observaciones?.trim()) {
                 const observacionesActuales = prestamo.observaciones || '';
                 const nuevasObservaciones = observacionesActuales + 
-                    `\n[${new Date().toLocaleString()}] Devolución: ${observaciones.trim()}`;
+                    `\n[${new Date().toLocaleString()}] Devolución por ${req.usuario.nombre}: ${observaciones.trim()}`;
 
                 await connection.execute(
                     'UPDATE prestamos SET observaciones = ? WHERE id = ?',
@@ -397,15 +417,13 @@ const devolverItems = async (req, res) => {
                 );
             }
 
-            // 7. El trigger se encarga de actualizar el estado del préstamo automáticamente
-
-            // 8. Commit
+            // 7. Commit (los triggers manejan el resto automáticamente)
             await connection.commit();
 
-            // 9. Obtener préstamo actualizado
+            // 8. Obtener préstamo actualizado
             const prestamoActualizado = await obtenerPrestamoCompleto(connection, prestamo.id);
 
-            // 10. Respuesta exitosa
+            // 9. Respuesta exitosa
             res.json({
                 msg: `${itemsDevueltos.length} item(s) devuelto(s) correctamente`,
                 items_devueltos: itemsDevueltos,
