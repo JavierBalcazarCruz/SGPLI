@@ -1,0 +1,192 @@
+/* Estilos personalizados para el Sistema de Laboratorio */
+
+/* Variables CSS personalizadas */
+:root {
+  --primary-color: #0d6efd;
+  --secondary-color: #6c757d;
+  --success-color: #198754;
+  --info-color: #0dcaf0;
+  --warning-color: #ffc107;
+  --danger-color: #dc3545;
+  --light-color: #f8f9fa;
+  --dark-color: #212529;
+}
+
+/* Mejoras globales */
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', sans-serif;
+  background-color: var(--light-color);
+  line-height: 1.6;
+}
+
+/* Utilidades personalizadas */
+.bg-gradient {
+  background: linear-gradient(135deg, var(--primary-color) 0%, #4169e1 100%);
+}
+
+.shadow-custom {
+  box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.08);
+}
+
+.rounded-4 {
+  border-radius: 1rem !important;
+}
+
+/* Animaciones suaves */
+.card {
+  transition: all 0.3s ease;
+}
+
+.card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 0.75rem 1.5rem rgba(0, 0, 0, 0.12);
+}
+
+.btn {
+  transition: all 0.2s ease;
+}
+
+/* Mejoras para formularios */
+.form-control:focus {
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 0.2rem rgba(13, 110, 253, 0.15);
+}
+
+.form-control-lg {
+  font-size: 1.1rem;
+  padding: 0.75rem 1rem;
+}
+
+/* Spinner personalizado */
+.spinner-border-custom {
+  width: 1.5rem;
+  height: 1.5rem;
+  border-width: 2px;
+}
+
+/* Cards de estadísticas */
+.stats-card {
+  border: none;
+  transition: all 0.3s ease;
+}
+
+.stats-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 1rem 2rem rgba(0, 0, 0, 0.1);
+}
+
+/* Navbar personalizado */
+.navbar-brand {
+  font-weight: 600;
+  font-size: 1.3rem;
+}
+
+/* Dropdown mejorado */
+.dropdown-menu {
+  border: none;
+  box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+  border-radius: 0.5rem;
+}
+
+.dropdown-item {
+  padding: 0.5rem 1rem;
+  font-size: 0.95rem;
+}
+
+.dropdown-item:hover {
+  background-color: var(--light-color);
+}
+
+/* Responsive mejoras */
+@media (max-width: 768px) {
+  .container-fluid {
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+  
+  .card-body {
+    padding: 1.5rem;
+  }
+  
+  .display-1 {
+    font-size: 3rem;
+  }
+}
+
+/* Loading states */
+.loading-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(255, 255, 255, 0.9);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+}
+
+/* Alertas personalizadas */
+.alert-custom {
+  border: none;
+  border-radius: 0.75rem;
+  font-weight: 500;
+}
+
+/* Badges mejorados */
+.badge {
+  font-weight: 500;
+  font-size: 0.75em;
+}
+
+/* Botones personalizados */
+.btn-outline-custom {
+  border-width: 2px;
+  font-weight: 500;
+}
+
+/* Tablas responsive */
+.table-responsive {
+  border-radius: 0.5rem;
+  overflow: hidden;
+  box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+}
+
+.table th {
+  background-color: var(--light-color);
+  border-top: none;
+  font-weight: 600;
+  font-size: 0.9rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  padding: 1rem 0.75rem;
+}
+
+/* Iconos mejorados */
+.bi {
+  font-style: normal;
+}
+
+/* Estados de carga para botones */
+.btn:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+/* Mejoras para modales */
+.modal-content {
+  border: none;
+  border-radius: 1rem;
+  box-shadow: 0 1rem 3rem rgba(0, 0, 0, 0.2);
+}
+
+.modal-header {
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+  border-radius: 1rem 1rem 0 0;
+}
+
+.modal-footer {
+  border-top: 1px solid rgba(0, 0, 0, 0.1);
+  border-radius: 0 0 1rem 1rem;
+}
